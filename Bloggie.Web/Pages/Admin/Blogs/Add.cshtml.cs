@@ -8,12 +8,15 @@ using System.Text.Json;
 
 namespace Bloggie.Web.Pages.Admin.Blogs
 {
-    public class AddModel : PageModel
-    {
+	public class AddModel : PageModel
+	{
 		private readonly IBlogPostRepository blogPostRepository;
 
 		[BindProperty]
-        public AddBlogPost AddBlogPostRequest { get; set; }
+		public AddBlogPost AddBlogPostRequest { get; set; }
+
+		[BindProperty]
+		public IFormFile FeaturedImage { get; set; }
 
 		public AddModel(IBlogPostRepository blogPostRepository)
 		{

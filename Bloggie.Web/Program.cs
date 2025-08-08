@@ -7,10 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddControllers(); // Add this line to enable API controllers
+
 builder.Services.AddDbContext<BloggieDbContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IImageRespository, ImageRespositoryCloudinary>();
 
 var app = builder.Build();
 
@@ -30,5 +33,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapControllers(); // Map API controllers
 
 app.Run();
