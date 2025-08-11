@@ -1,5 +1,6 @@
 using Bloggie.Web.Data;
 using Bloggie.Web.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,36 @@ builder.Services.AddControllers(); // Add this line to enable API controllers
 builder.Services.AddDbContext<BloggieDbContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
+
+//builder.Services.AddDbContext<AuthDbContext>(options =>
+//options.UseSqlServer(
+//    builder.Configuration.GetConnectionString("BloggieAuthDbConnectionString")));
+
+builder.Services.AddDbContext<AuthDbContext>(options =>
+	options.UseSqlServer(
+		builder.Configuration.GetConnectionString("BloggieAuthDbConnectionString"))
+	.ConfigureWarnings(warnings =>
+		warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	//Default Password Settings
+	options.Password.RequireDigit = true;
+	options.Password.RequireLowercase = true;
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireUppercase = false;
+	options.Password.RequiredLength = 6;
+	options.Password.RequiredUniqueChars = 1;
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.LoginPath = "/Login";
+});
+
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRespository, ImageRespositoryCloudinary>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
@@ -31,6 +62,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Ensure authentication is used before authorization
 app.UseAuthorization();
 
 app.MapRazorPages();
