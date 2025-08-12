@@ -15,5 +15,6 @@
 
 		// Navigation property
 		public ICollection<Tag> Tags { get; set; }
+		public ICollection<BlogPostLike> Likes { get; set; }
 	}
 }
