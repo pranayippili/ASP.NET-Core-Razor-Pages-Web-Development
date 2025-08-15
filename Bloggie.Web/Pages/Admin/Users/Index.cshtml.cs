@@ -20,6 +20,7 @@ namespace Bloggie.Web.Pages.Admin.Users
 		[BindProperty]
 		public Guid SelectedUserId { get; set; }
 
+
 		public IndexModel(IUserRepository userRepository)
 		{
 			this.userRepository = userRepository;
