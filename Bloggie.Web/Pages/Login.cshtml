@@ -15,12 +15,14 @@
 
 					<div class="mb-3">
 						<label class="form-label">Username</label>
-						<input class="form-control" type="text" asp-for="LoginViewModel.Username" />
+						<input class="form-control" type="text" asp-for="LoginViewModel.Username" required/>
+						<span asp-validation-for="LoginViewModel.Username" class="text-danger"></span>
 					</div>
 
 					<div class="mb-3">
 						<label class="form-label">Password</label>
-						<input class="form-control" type="password" asp-for="LoginViewModel.Password" />
+						<input class="form-control" type="password" asp-for="LoginViewModel.Password" required minlength="6"/>
+						<span asp-validation-for="LoginViewModel.Password" class="text-danger"></span>
 					</div>
 
 					<div class="mb-3">
