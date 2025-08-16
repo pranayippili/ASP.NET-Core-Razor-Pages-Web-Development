@@ -64,15 +64,18 @@
 				<div class="modal-body">
 					<div class="mb-3">
 						<label class="form-label">UserName</label>
-						<input type="text" class="form-control" asp-for="AddUserRequest.UserName" />
+						<input type="text" class="form-control" asp-for="AddUserRequest.UserName" required/>
+						<span asp-validation-for="AddUserRequest.UserName" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
 						<label class="form-label">Email</label>
-						<input type="email" class="form-control" asp-for="AddUserRequest.Email" />
+						<input type="email" class="form-control" asp-for="AddUserRequest.Email" required/>
+						<span asp-validation-for="AddUserRequest.Email" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
 						<label class="form-label">Password</label>
-						<input type="password" class="form-control" asp-for="AddUserRequest.Password" />
+						<input type="password" class="form-control" asp-for="AddUserRequest.Password" required minlength="6"/>
+						<span asp-validation-for="AddUserRequest.Password" class="text-danger"></span>
 					</div>
 					<div class="mb-3">
 						<div class="form-check">
