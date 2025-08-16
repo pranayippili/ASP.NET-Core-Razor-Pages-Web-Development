@@ -2,12 +2,11 @@ using Bloggie.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Runtime.CompilerServices;
 
 namespace Bloggie.Web.Pages
 {
-    public class RegisterModel : PageModel
-    {
+	public class RegisterModel : PageModel
+	{
 		private readonly UserManager<IdentityUser> userManager;
 
 		[BindProperty]
@@ -18,41 +17,50 @@ namespace Bloggie.Web.Pages
 			this.userManager = userManager;
 		}
 		public void OnGet()
-        {
-        }
-        public async Task<IActionResult> OnPost()
-        {
-			var user = new IdentityUser
+		{
+		}
+		public async Task<IActionResult> OnPost()
+		{
+			if (ModelState.IsValid)
 			{
-				UserName = RegisterViewModel.Username,
-				Email = RegisterViewModel.Email
-			};
-            var identityResult = await userManager.CreateAsync(user, RegisterViewModel.Password);
-
-			if (identityResult.Succeeded)
-			{
-				var addRolesResult = await userManager.AddToRoleAsync(user, "User");
-
-				if (addRolesResult.Succeeded) 
+				var user = new IdentityUser
 				{
-					ViewData["Notification"] = new Notification
+					UserName = RegisterViewModel.Username,
+					Email = RegisterViewModel.Email
+				};
+				var identityResult = await userManager.CreateAsync(user, RegisterViewModel.Password);
+
+				if (identityResult.Succeeded)
+				{
+					var addRolesResult = await userManager.AddToRoleAsync(user, "User");
+
+					if (addRolesResult.Succeeded)
 					{
-						Type = Enums.NotificationType.Success,
-						Message = "User registered successfully."
-					};
+						ViewData["Notification"] = new Notification
+						{
+							Type = Enums.NotificationType.Success,
+							Message = "User registered successfully."
+						};
 
-					return Page();
+						return Page();
 
+					}
 				}
+
+				ViewData["Notification"] = new Notification
+				{
+					Type = Enums.NotificationType.Error,
+					Message = "User registration failed. Please try again."
+				};
+
+				return Page();
+			}
+			else
+			{
+				return Page();
 			}
 
-			ViewData["Notification"] = new Notification
-			{
-				Type = Enums.NotificationType.Error,
-				Message = "User registration failed. Please try again."
-			};
 
-			return Page();
 		}
 	}
 }
