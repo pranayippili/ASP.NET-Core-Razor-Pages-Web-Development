@@ -4,16 +4,13 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> userManager
 @inject SignInManager<IdentityUser> signInManager
+@if (Model.BlogPost != null)
+{
+	<div class="container my-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-6">
+				ViewData["Title"] = Model.BlogPost.PageTitle;
 
-@{
-	ViewData["Title"] = Model.BlogPost.PageTitle;
-}
-
-<div class="container my-5">
-	<div class="row justify-content-center">
-		<div class="col-12 col-lg-6">
-			@if (Model.BlogPost != null)
-			{
 				<h1 class="mb-3">@Model.BlogPost.Heading</h1>
 
 				<div class="d-flex justify-content-between mb-3">
@@ -72,6 +69,7 @@
 								<div class="mb-3">
 									<label class="form-label">Comment Description</label>
 									<input type="text" class="form-control" asp-for="CommentDescription" />
+									<span asp-validation-for="CommentDescription" class="text-danger"></span>
 								</div>
 								<div class="mb-3">
 									<button type="submit" class="btn btn-dark">Add Comment</button>
@@ -106,54 +104,58 @@
 					</div>
 				</div>
 
-			}
-			else
-			{
-				<h2>Blog Post not found!</h2>
-			}
 
+
+			</div>
 		</div>
 	</div>
-</div>
 
-@section Scripts {
-	<script>
-		const btnLike = document.getElementById('btnLike');
-		const totalLikesElement = document.getElementById('totalLikes');
+	@section Scripts {
+		<script>
+			const btnLike = document.getElementById('btnLike');
+			const totalLikesElement = document.getElementById('totalLikes');
 
-		async function getTotalLikes(){
-			fetch('/api/blogpostlike/@Model.BlogPost.Id/totallikes',
+			async function getTotalLikes(){
+				fetch('/api/blogpostlike/@Model.BlogPost.Id/totallikes',
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'appication/json',
+						'Accept': '*/*'
+					}
+				})
+				.then(data => data.json())
+				.then(result => totalLikesElement.innerHTML = result);
+			}
+
+			async function addLikeForBlog()
 			{
-				method: 'GET',
-				headers: {
-					'Content-Type': 'appication/json',
-					'Accept': '*/*'
-				}
-			})
-			.then(data => data.json())
-			.then(result => totalLikesElement.innerHTML = result);
-		}
+				fetch('/api/blogpostlike/add', {
+					method: 'Post',
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': '*/*'
+					},
+					body: JSON.stringify({ blogPostId: '@Model.BlogPost.Id', UserId: '@userManager.GetUserId(User)'})
+				}).then(() => {
+					btnLike.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
+					btnLike.removeEventListener('click', addLikeForBlog);
+					getTotalLikes();
+				});
+			}
+			const isLiked = @Model.Liked.ToString().ToLower();
+			if (!isLiked)
+			{
+				btnLike.addEventListener('click', addLikeForBlog);
+			}
 
-		async function addLikeForBlog()
-		{
-			fetch('/api/blogpostlike/add', {
-				method: 'Post',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': '*/*'
-				},
-				body: JSON.stringify({ blogPostId: '@Model.BlogPost.Id', UserId: '@userManager.GetUserId(User)'})
-			}).then(() => {
-				btnLike.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
-				btnLike.removeEventListener('click', addLikeForBlog);
-				getTotalLikes();
-			});
-		}
-		const isLiked = @Model.Liked.ToString().ToLower();
-		if (!isLiked)
-		{
-			btnLike.addEventListener('click', addLikeForBlog);
-		}
-
-	</script>
+		</script>
+	}
 }
+else
+{
+	<div class="container mt-3">
+		<h2>Blog Post not found!</h2>
+	</div>
+}
+
