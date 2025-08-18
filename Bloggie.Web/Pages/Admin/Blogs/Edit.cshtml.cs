@@ -10,10 +10,8 @@ using System.Text.Json;
 namespace Bloggie.Web.Pages.Admin.Blogs
 {
 	[Authorize(Roles = "Admin")]
-	public class EditModel : PageModel
+	public class EditModel(IBlogPostRepository blogPostRepository) : PageModel
 	{
-		private readonly IBlogPostRepository blogPostRepository;
-
 		[BindProperty]
 		public EditBlogPostRequest BlogPost { get; set; }
 
@@ -24,10 +22,6 @@ namespace Bloggie.Web.Pages.Admin.Blogs
 		[Required]
 		public string Tags { get; set; }
 
-		public EditModel(IBlogPostRepository blogPostRepository)
-		{
-			this.blogPostRepository = blogPostRepository;
-		}
 		public async Task OnGet(Guid id)
 		{
 			var blogPostDomainModel = await blogPostRepository.GetAsync(id);

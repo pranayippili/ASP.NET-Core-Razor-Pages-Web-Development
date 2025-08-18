@@ -4,14 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bloggie.Web.Pages
 {
-    public class LogoutModel : PageModel
+    public class LogoutModel(SignInManager<IdentityUser> signInManager) : PageModel
     {
-		private readonly SignInManager<IdentityUser> signInManager;
-
-		public LogoutModel(SignInManager<IdentityUser> signInManager)
-		{
-			this.signInManager = signInManager;
-		}
 		public async Task<IActionResult> OnGet()
         {
 			await signInManager.SignOutAsync();

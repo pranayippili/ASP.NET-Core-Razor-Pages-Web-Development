@@ -8,14 +8,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Bloggie.Web.Pages.Blog
 {
-	public class DetailsModel : PageModel
+	public class DetailsModel(IBlogPostRepository blogPostRepository,
+		IBlogPostLikeRepository blogPostLikeRepository,
+		SignInManager<IdentityUser> signInManager,
+		UserManager<IdentityUser> userManager,
+		IBlogPostCommentRepository blogPostCommentRepository) : PageModel
 	{
-		private readonly IBlogPostRepository blogPostRepository;
-		private readonly IBlogPostLikeRepository blogPostLikeRepository;
-		private readonly SignInManager<IdentityUser> signInManager;
-		private readonly UserManager<IdentityUser> userManager;
-		private readonly IBlogPostCommentRepository blogPostCommentRepository;
-
 		public BlogPost BlogPost { get; set; }
 
 		public List<BlogComment> Comments { get; set; }
@@ -33,18 +31,6 @@ namespace Bloggie.Web.Pages.Blog
 		[MaxLength(200)]
 		public string CommentDescription { get; set; }
 
-		public DetailsModel(IBlogPostRepository blogPostRepository,
-			IBlogPostLikeRepository blogPostLikeRepository,
-			SignInManager<IdentityUser> signInManager,
-			UserManager<IdentityUser> userManager,
-			IBlogPostCommentRepository blogPostCommentRepository)
-		{
-			this.blogPostRepository = blogPostRepository;
-			this.blogPostLikeRepository = blogPostLikeRepository;
-			this.signInManager = signInManager;
-			this.userManager = userManager;
-			this.blogPostCommentRepository = blogPostCommentRepository;
-		}
 		public async Task<IActionResult> OnGet(string urlHandle)
         {
 			await GetBlog(urlHandle);

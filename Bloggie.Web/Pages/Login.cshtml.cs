@@ -5,17 +5,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bloggie.Web.Pages
 {
-	public class LoginModel : PageModel
+	public class LoginModel(SignInManager<IdentityUser> signInManager) : PageModel
 	{
-		private readonly SignInManager<IdentityUser> signInManager;
-
 		[BindProperty]
 		public Login LoginViewModel { get; set; }
 
-		public LoginModel(SignInManager<IdentityUser> signInManager)
-		{
-			this.signInManager = signInManager;
-		}
 		public void OnGet()
 		{
 		}

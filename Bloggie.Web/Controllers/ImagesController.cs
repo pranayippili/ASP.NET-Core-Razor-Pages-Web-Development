@@ -6,14 +6,8 @@ namespace Bloggie.Web.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class ImagesController : Controller
+	public class ImagesController(IImageRespository imageRespository) : Controller
 	{
-		private readonly IImageRespository imageRespository;
-		public ImagesController(IImageRespository imageRespository)
-		{
-			this.imageRespository = imageRespository;
-		}
-
 		[HttpPost]
 		public async Task<IActionResult> UploadAsync(IFormFile file)
 		{

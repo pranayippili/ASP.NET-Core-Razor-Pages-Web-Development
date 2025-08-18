@@ -10,10 +10,8 @@ using System.Text.Json;
 namespace Bloggie.Web.Pages.Admin.Blogs
 {
 	[Authorize(Roles = "Admin")]
-	public class AddModel : PageModel
+	public class AddModel(IBlogPostRepository blogPostRepository) : PageModel
 	{
-		private readonly IBlogPostRepository blogPostRepository;
-
 		[BindProperty]
 		public AddBlogPost AddBlogPostRequest { get; set; }
 
@@ -24,10 +22,6 @@ namespace Bloggie.Web.Pages.Admin.Blogs
 		[Required]
 		public string Tags { get; set; }
 
-		public AddModel(IBlogPostRepository blogPostRepository)
-		{
-			this.blogPostRepository = blogPostRepository;
-		}
 		public void OnGet()
 		{
 		}

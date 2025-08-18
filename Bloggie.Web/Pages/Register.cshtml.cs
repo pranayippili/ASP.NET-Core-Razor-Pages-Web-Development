@@ -5,17 +5,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bloggie.Web.Pages
 {
-	public class RegisterModel : PageModel
+	public class RegisterModel(UserManager<IdentityUser> userManager) : PageModel
 	{
-		private readonly UserManager<IdentityUser> userManager;
-
 		[BindProperty]
 		public Register RegisterViewModel { get; set; }
 
-		public RegisterModel(UserManager<IdentityUser> userManager)
-		{
-			this.userManager = userManager;
-		}
 		public void OnGet()
 		{
 		}

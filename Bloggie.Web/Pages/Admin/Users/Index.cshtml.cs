@@ -8,10 +8,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Bloggie.Web.Pages.Admin.Users
 {
 	[Authorize(Roles = "Admin")]
-	public class IndexModel : PageModel
+	public class IndexModel(IUserRepository userRepository) : PageModel
 	{
-		private readonly IUserRepository userRepository;
-
 		public List<User> Users { get; set; }
 
 		[BindProperty]
@@ -19,12 +17,6 @@ namespace Bloggie.Web.Pages.Admin.Users
 
 		[BindProperty]
 		public Guid SelectedUserId { get; set; }
-
-
-		public IndexModel(IUserRepository userRepository)
-		{
-			this.userRepository = userRepository;
-		}
 
 		public async Task<IActionResult> OnGet()
 		{

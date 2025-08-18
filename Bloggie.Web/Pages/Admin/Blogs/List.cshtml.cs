@@ -11,16 +11,9 @@ using System.Text.Json;
 namespace Bloggie.Web.Pages.Admin.Blogs
 {
 	[Authorize(Roles ="Admin")]
-    public class ListModel : PageModel
+    public class ListModel(IBlogPostRepository blogPostRepository) : PageModel
     {
-		private readonly IBlogPostRepository blogPostRepository;
-
 		public List<BlogPost> BlogPosts { get; set; }
-
-		public ListModel(IBlogPostRepository blogPostRepository)
-		{
-			this.blogPostRepository = blogPostRepository;
-		}
 
 		public async Task OnGet()
         {

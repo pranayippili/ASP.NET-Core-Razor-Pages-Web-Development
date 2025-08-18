@@ -6,15 +6,8 @@ namespace Bloggie.Web.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class BlogPostLikeController : Controller
+	public class BlogPostLikeController(IBlogPostLikeRepository blogPostLikeRepository) : Controller
 	{
-		private readonly IBlogPostLikeRepository blogPostLikeRepository;
-
-		public BlogPostLikeController(IBlogPostLikeRepository blogPostLikeRepository)
-		{
-			this.blogPostLikeRepository = blogPostLikeRepository;
-		}
-
 		[Route("Add")]
 		[HttpPost]
 		public async Task<IActionResult> AddLike([FromBody] AddBlogPostLikeRequest addBlogPostLikeRequest)
